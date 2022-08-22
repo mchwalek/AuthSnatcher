@@ -1,11 +1,11 @@
-chrome.storage.local.get("tokens", ({ tokens }) => {
+chrome.storage.local.get(null, data => {
     const tokenTable = document.getElementById("token-table");
 
-    for (const url in tokens) {
+    for (const url in data) {
         const urlDiv = createUlrDiv(url);
         tokenTable.appendChild(urlDiv)
 
-        const tokenDiv = createTokenDiv(tokens[url]);
+        const tokenDiv = createTokenDiv(data[url]);
         tokenTable.appendChild(tokenDiv)
 
         const buttonDiv = createButtonDiv(tokenDiv);

@@ -19,14 +19,7 @@ chrome.webRequest.onSendHeaders.addListener(
             return;
         }
 
-        chrome.storage.local.get("tokens", ({ tokens }) => {
-            if (!tokens) {
-                tokens = {};
-            }
-
-            tokens[details.url] = authHeader.value.substring(BearerPrefix.length);
-            chrome.storage.local.set({ tokens });
-        });
+        chrome.storage.local.set({ [details.url]: authHeader.value.substring(BearerPrefix.length) });
     },
     {
         urls: ["<all_urls>"]
