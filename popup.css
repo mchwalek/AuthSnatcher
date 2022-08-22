@@ -1,0 +1,24 @@
+#token-table {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 1px 0;
+    background-color: #000;
+    width: 500px;
+}
+
+#token-table > div {
+    background-color: #fff;
+    padding: 5px 2px;
+}
+
+.url-column {
+    overflow-wrap: anywhere;
+}
+
+.copy-button {
+    width: 65px;
+}
+
+.token::-webkit-scrollbar {
+    display: none;
+}

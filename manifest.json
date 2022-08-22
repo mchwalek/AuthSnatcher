@@ -1,0 +1,21 @@
+{
+    "name": "Auth Snatcher",
+    "description": "Collect auth headers from Fetch/XHR requests",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "storage",
+        "webRequest"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "author": "Maksymilian Chwałek",
+    "homepage_url": "https://github.com/mchwalek/AuthSnatcher"
+}
