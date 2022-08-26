@@ -1,64 +1,76 @@
-chrome.storage.local.get(null, data => {
-    const tokenTable = document.getElementById("token-table");
+const clearButtonContainerDiv = document.getElementById("clear-button-container");
+clearButtonContainerDiv.onclick = () => {
+    const tokens = {};
+    chrome.storage.local.set({ tokens });
+    refreshTokenTable();
+}
 
-    for (const url in data) {
-        const urlDiv = createUlrDiv(url);
-        tokenTable.appendChild(urlDiv)
+refreshTokenTable();
 
-        const tokenDiv = createTokenDiv(data[url]);
-        tokenTable.appendChild(tokenDiv)
+function refreshTokenTable() {
+    chrome.storage.local.get("tokens", ({ tokens }) => {
+        const tokenTable = document.getElementById("token-table");
+        tokenTable.innerHTML = "";
 
-        const buttonDiv = createButtonDiv(tokenDiv);
-        tokenTable.appendChild(buttonDiv)
+        for (const url in tokens) {
+            const urlDiv = createUlrDiv(url);
+            tokenTable.appendChild(urlDiv)
+
+            const tokenDiv = createTokenDiv(tokens[url]);
+            tokenTable.appendChild(tokenDiv)
+
+            const copyButtonDiv = createCopyButtonDiv(tokenDiv);
+            tokenTable.appendChild(copyButtonDiv)
+        }
+    });
+
+    function createUlrDiv(url) {
+        const urlDiv = document.createElement("div");
+        urlDiv.innerText = url;
+        urlDiv.setAttribute("class", "url-column");
+
+        return urlDiv;
     }
-});
 
-function createUlrDiv(url) {
-    const urlDiv = document.createElement("div");
-    urlDiv.innerText = url;
-    urlDiv.setAttribute("class", "url-column");
+    function createTokenDiv(token) {
+        const tokenDiv = document.createElement("div");
+        tokenDiv.setAttribute("class", "token-column");
 
-    return urlDiv;
-}
+        const tokenTextArea = document.createElement("textarea");
+        tokenTextArea.value = token;
+        tokenTextArea.setAttribute("class", "token");
+        tokenTextArea.setAttribute("readonly", "");
+        tokenTextArea.setAttribute("cols", 20);
+        tokenTextArea.setAttribute("rows", 4);
+        tokenDiv.appendChild(tokenTextArea);
 
-function createTokenDiv(token) {
-    const tokenDiv = document.createElement("div");
-    tokenDiv.setAttribute("class", "token-column");
+        return tokenDiv;
+    }
 
-    const tokenTextArea = document.createElement("textarea");
-    tokenTextArea.value = token;
-    tokenTextArea.setAttribute("class", "token");
-    tokenTextArea.setAttribute("readonly", "");
-    tokenTextArea.setAttribute("cols", 20);
-    tokenTextArea.setAttribute("rows", 4);
-    tokenDiv.appendChild(tokenTextArea);
+    function createCopyButtonDiv(tokenDiv) {
+        const defaultText = "copy";
 
-    return tokenDiv;
-}
+        const buttonDiv = document.createElement("div");
+        buttonDiv.setAttribute("class", "button-column");
 
-function createButtonDiv(tokenDiv) {
-    const DefaultText = "copy";
+        const copyButton = document.createElement("button");
+        copyButton.innerText = defaultText;
+        copyButton.setAttribute("class", "copy-button");
+        copyButton.setAttribute("type", "button");
+        copyButton.onclick = () => {
+            const tokenTextArea = tokenDiv.querySelector("textarea");
+            navigator.clipboard.writeText(tokenTextArea.value)
+                .then(
+                    () => {
+                        this.innerText = "copied!";
+                        setTimeout(() => { this.innerText = defaultText; }, 750);
+                    },
+                    () => {
+                        alert("Copy failed!");
+                    });
+        };
+        buttonDiv.appendChild(copyButton);
 
-    const buttonDiv = document.createElement("div");
-    buttonDiv.setAttribute("class", "button-column");
-
-    const copyButton = document.createElement("button");
-    copyButton.innerText = DefaultText;
-    copyButton.setAttribute("class", "copy-button");
-    copyButton.setAttribute("type", "button");
-    copyButton.onclick = function() {
-        const tokenTextArea = tokenDiv.querySelector("textarea");
-        navigator.clipboard.writeText(tokenTextArea.value)
-            .then(
-                () => {
-                    this.innerText = "copied!";
-                    setTimeout(() => { this.innerText = DefaultText; }, 750);
-                },
-                () => {
-                    alert("Copy failed!");
-                });
-    };
-    buttonDiv.appendChild(copyButton);
-
-    return buttonDiv;
+        return buttonDiv;
+    }
 }

@@ -1,5 +1,10 @@
 const BearerPrefix = "Bearer ";
 
+let tokens;
+chrome.storage.local.get("tokens", ({ storageTokens }) => {
+    tokens = storageTokens || {};
+});
+
 chrome.webRequest.onSendHeaders.addListener(
     details => {
         if (details.type !== "xmlhttprequest") {
@@ -19,7 +24,8 @@ chrome.webRequest.onSendHeaders.addListener(
             return;
         }
 
-        chrome.storage.local.set({ [details.url]: authHeader.value.substring(BearerPrefix.length) });
+        tokens[details.url] = authHeader.value.substring(BearerPrefix.length);
+        chrome.storage.local.set({ tokens });
     },
     {
         urls: ["<all_urls>"]

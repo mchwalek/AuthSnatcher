@@ -1,4 +1,4 @@
-#token-table {
+#content {
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: 1px 0;
@@ -6,9 +6,18 @@
     width: 500px;
 }
 
-#token-table > div {
+#content div {
     background-color: #fff;
     padding: 5px 2px;
+}
+
+#content > #clear-button-container {
+    grid-area: 1 / 1 / 1 / -1;
+    text-align: end;
+}
+
+#content > #token-table {
+    display: contents;
 }
 
 .url-column {
