@@ -5,6 +5,9 @@ chrome.storage.local.get("tokens", ({ storageTokens }) => {
     tokens = storageTokens || {};
 });
 
+// HACK: workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=1024211
+chrome.webNavigation.onBeforeNavigate.addListener(() => {});
+
 chrome.webRequest.onSendHeaders.addListener(
     details => {
         if (details.type !== "xmlhttprequest") {
