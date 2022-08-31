@@ -8,7 +8,8 @@ clearButtonContainerDiv.onclick = () => {
 refreshTokenTable();
 
 function refreshTokenTable() {
-    chrome.storage.local.get("tokens", ({ tokens }) => {
+    chrome.storage.local.get(null, data => {
+        const tokens = data.tokens;
         const tokenTable = document.getElementById("token-table");
         tokenTable.innerHTML = "";
 

@@ -1,8 +1,14 @@
 const BearerPrefix = "Bearer ";
 
 let tokens;
-chrome.storage.local.get("tokens", ({ storageTokens }) => {
-    tokens = storageTokens || {};
+chrome.storage.local.get(null, data => {
+    if (data && data.tokens) {
+        tokens = data.tokens;
+    }
+    else {
+        tokens = {};
+    }
+
 });
 
 // HACK: workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=1024211
