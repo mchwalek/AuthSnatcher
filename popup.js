@@ -1,6 +1,6 @@
 const urlSearchInput = document.getElementById("url-search");
 urlSearchInput.oninput = args => {
-    refreshTokenTable(args.currentTarget.value);
+    loadTokenTable(args.currentTarget.value);
 }
 
 const clearButtonContainerDiv = document.getElementById("clear-button-container");
@@ -9,31 +9,36 @@ clearButtonContainerDiv.onclick = () => {
     chrome.storage.local.set({ tokens });
 
     urlSearchInput.value = "";
-    refreshTokenTable(null);
+    loadTokenTable(null);
 }
 
-refreshTokenTable(null);
+loadTokenTable(null);
 
-function refreshTokenTable(filterUrl) {
+function loadTokenTable(filterUrl) {
     chrome.storage.local.get(null, data => {
         const tokens = data.tokens;
         const tokenTable = document.getElementById("token-table");
         tokenTable.innerHTML = "";
 
+        let tokensPresent = false;
         for (const url in tokens) {
             if (filterUrl && !url.includes(filterUrl)) {
                 continue;
             }
 
+            tokensPresent = true;
+
             const urlDiv = createUlrDiv(url);
-            tokenTable.appendChild(urlDiv)
+            tokenTable.appendChild(urlDiv);
 
             const tokenDiv = createTokenDiv(tokens[url]);
-            tokenTable.appendChild(tokenDiv)
+            tokenTable.appendChild(tokenDiv);
 
             const copyButtonDiv = createCopyButtonDiv(tokenDiv);
-            tokenTable.appendChild(copyButtonDiv)
+            tokenTable.appendChild(copyButtonDiv);
         }
+
+        toggleNoDataPlaceholder(tokensPresent);
     });
 
     function createUlrDiv(url) {
@@ -84,5 +89,10 @@ function refreshTokenTable(filterUrl) {
         buttonDiv.appendChild(copyButton);
 
         return buttonDiv;
+    }
+
+    function toggleNoDataPlaceholder(tokensPresent) {
+        const noDataPlaceholder = document.getElementById("no-data-placeholder");
+        noDataPlaceholder.style.display = tokensPresent ? "none" : "block";
     }
 }
