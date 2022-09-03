@@ -1,6 +1,6 @@
 #content {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr 180px 65px;
     gap: 1px 0;
     background-color: #000;
     width: 500px;
@@ -16,6 +16,15 @@
     text-align: end;
 }
 
+#content > #search-container {
+    display: contents;
+}
+
+#search-container input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 #content > #token-table {
     display: contents;
 }
@@ -25,7 +34,12 @@
 }
 
 .copy-button {
-    width: 65px;
+    width: 100%;
+}
+
+.token {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .token::-webkit-scrollbar {

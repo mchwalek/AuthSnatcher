@@ -1,19 +1,30 @@
+const urlSearchInput = document.getElementById("url-search");
+urlSearchInput.oninput = args => {
+    refreshTokenTable(args.currentTarget.value);
+}
+
 const clearButtonContainerDiv = document.getElementById("clear-button-container");
 clearButtonContainerDiv.onclick = () => {
     const tokens = {};
     chrome.storage.local.set({ tokens });
-    refreshTokenTable();
+
+    urlSearchInput.value = "";
+    refreshTokenTable(null);
 }
 
-refreshTokenTable();
+refreshTokenTable(null);
 
-function refreshTokenTable() {
+function refreshTokenTable(filterUrl) {
     chrome.storage.local.get(null, data => {
         const tokens = data.tokens;
         const tokenTable = document.getElementById("token-table");
         tokenTable.innerHTML = "";
 
         for (const url in tokens) {
+            if (filterUrl && !url.includes(filterUrl)) {
+                continue;
+            }
+
             const urlDiv = createUlrDiv(url);
             tokenTable.appendChild(urlDiv)
 
@@ -41,7 +52,6 @@ function refreshTokenTable() {
         tokenTextArea.value = token;
         tokenTextArea.setAttribute("class", "token");
         tokenTextArea.setAttribute("readonly", "");
-        tokenTextArea.setAttribute("cols", 20);
         tokenTextArea.setAttribute("rows", 4);
         tokenDiv.appendChild(tokenTextArea);
 
