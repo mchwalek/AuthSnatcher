@@ -38,6 +38,7 @@ function loadTokenTable(filterUrl) {
             tokenTable.appendChild(copyButtonDiv);
         }
 
+        toggleSearchContainer(filterUrl, tokensPresent);
         toggleNoDataPlaceholder(tokensPresent);
     });
 
@@ -89,6 +90,11 @@ function loadTokenTable(filterUrl) {
         buttonDiv.appendChild(copyButton);
 
         return buttonDiv;
+    }
+
+    function toggleSearchContainer(filterUrl, tokensPresent) {
+        const searchContainer = document.getElementById("search-container");
+        searchContainer.style.display = !filterUrl && !tokensPresent ? "none" : "contents";
     }
 
     function toggleNoDataPlaceholder(tokensPresent) {
