@@ -68,13 +68,14 @@ function refreshTokenTable(filterUrl) {
         copyButton.innerText = defaultText;
         copyButton.setAttribute("class", "copy-button");
         copyButton.setAttribute("type", "button");
-        copyButton.onclick = () => {
+        copyButton.onclick = args => {
+            const button = args.currentTarget;
             const tokenTextArea = tokenDiv.querySelector("textarea");
             navigator.clipboard.writeText(tokenTextArea.value)
                 .then(
                     () => {
-                        this.innerText = "copied!";
-                        setTimeout(() => { this.innerText = defaultText; }, 750);
+                        button.innerText = "copied!";
+                        setTimeout(() => { button.innerText = defaultText; }, 750);
                     },
                     () => {
                         alert("Copy failed!");
